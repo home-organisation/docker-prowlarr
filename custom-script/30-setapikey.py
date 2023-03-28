@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-import sys
 import os
-import sqlite3
 import logging
 import xml.etree.ElementTree as ET
 
