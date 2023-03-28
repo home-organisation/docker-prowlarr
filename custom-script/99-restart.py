@@ -36,7 +36,8 @@ def restart(url, apikey):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    APIKEY = os.environ.get('APIKEY')
+    with open("/tmp/old-apikey", mode="rt") as f:
+        APIKEY = f.readline()
 
     logging.info("Restart application %s ..." % PROWLARR_URL)
     restart(PROWLARR_URL, APIKEY)
