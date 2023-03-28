@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 CONFIG_FILE = '/config/config.xml'
-PROWLARR_DB = 'prowlarr.db'
+PROWLARR_DB = '/config/prowlarr.db'
 
 
 ###########################################################
@@ -46,12 +46,14 @@ def set_credential(database, username, password):
         connexion = sqlite3.connect(database)
         db = connexion.cursor()
 
+        db.execute("CREATE TABLE Users (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Identifier TEXT NOT NULL, Username TEXT NOT NULL, Password TEXT NOT NULL, Salt TEXT, Iterations INTEGER)")
         db.execute(addquery, adddata)
         connexion.commit()
     except sqlite3.Error as er:
         if (' '.join(er.args)) == "UNIQUE constraint failed: Users.Username":
             logging.warning("User %s already exist, update password to match" % username)
             db.execute(updatequery, updatedata)
+
             connexion.commit()
         elif (' '.join(er.args)) == "unable to open database file":
             logging.error("Unable to open database file %s" % database)
