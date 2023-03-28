@@ -11,7 +11,7 @@ if [[ -e "${SCRIPTS_DIR}" ]] && [[ -n "$(/bin/ls -A ${SCRIPTS_DIR} 2>/dev/null)"
         NAME="$(basename "${SCRIPT}")"
         if [[ -f "${SCRIPT}" ]]; then
             echo "[postinstall] ${NAME}: executing..."
-            /bin/bash "${SCRIPT}"
+            /usr/bin/python "${SCRIPT}"
             echo "[postinstall] ${NAME}: exited $?"
         elif [[ ! -f "${SCRIPT}" ]]; then
             echo "[postinstall] ${NAME}: is not a file"
