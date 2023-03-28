@@ -46,7 +46,6 @@ def set_credential(database, username, password):
         connexion = sqlite3.connect(database)
         db = connexion.cursor()
 
-        db.execute("CREATE TABLE Users (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Identifier TEXT NOT NULL, Username TEXT NOT NULL, Password TEXT NOT NULL, Salt TEXT, Iterations INTEGER)")
         db.execute(addquery, adddata)
         connexion.commit()
     except sqlite3.Error as er:
