@@ -7,7 +7,7 @@ import logging
 # SET STATIC CONFIG
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
-PROWLARR_URL = 'http://localhost:7878'
+PROWLARR_URL = 'http://localhost:9696'
 
 
 ###########################################################
