@@ -1,0 +1,77 @@
+import sys
+import os
+import sqlite3
+import logging
+import xml.etree.ElementTree as ET
+
+###########################################################
+# SET STATIC CONFIG
+###########################################################
+logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
+CONFIG_FILE = '/config/config.xml'
+RADARR_URL = 'http://localhost:9393'
+RADARR_DB = 'prowlarr.db'
+
+
+###########################################################
+# DEFINE FUNCTION
+###########################################################
+def set_authenticationmethod(file, method):
+    # Set Authentication method to xml config files
+    try:
+        tree = ET.parse(file)
+        root = tree.getroot()
+
+        root.find("AuthenticationMethod").text = method
+        root.find("AuthenticationRequired").text = "Enabled"
+        tree.write(file)
+    except FileNotFoundError:
+        logging.warning("File %s is not initialized" % file)
+        return 1
+    except ET.ParseError:
+        logging.warning("File %s is not initialized" % file)
+        return 1
+    else:
+        return 0
+
+
+def set_credential(database, username, password):
+    # Create user in database
+    adddata = ('652bf21b-fe69-47f7-8e52-80e0572a9025', username, password)
+    addquery = "INSERT INTO Users (Identifier,Username,Password) VALUES(?, ?, ?)"
+    updatedata = (username, password)
+    updatequery = "UPDATE Users SET Password = ? WHERE Username = ?"
+
+    try:
+        connexion = sqlite3.connect(database)
+        db = connexion.cursor()
+
+        db.execute(addquery, adddata)
+        connexion.commit()
+    except sqlite3.Error as er:
+        if (' '.join(er.args)) == "UNIQUE constraint failed: Users.Username":
+            logging.warning("User %s already exist, update password to match" % username)
+            db.execute(updatequery, updatedata)
+            connexion.commit()
+        elif (' '.join(er.args)) == "unable to open database file":
+            logging.error("Unable to open database file %s" % database)
+            sys.exit(1)
+        else:
+            logging.error('SQLite error: %s' % (' '.join(er.args)))
+    finally:
+        db.close()
+        connexion.close()
+
+
+###########################################################
+# INIT CONFIG
+###########################################################
+
+logging.info("Get environment variable")
+PROWLARR_USER = os.environ.get('RADARR_USER')
+PROWLARR_PASSWORD = os.environ.get('RADARR_PASSWORD')
+PROWLARR_APIKEY = os.environ.get('RADARR_APIKEY')
+
+logging.info("Set Credential to application for user %s ..." % RADARR_USER)
+set_credential(RADARR_DB, RADARR_USER, RADARR_PASSWORD)
+set_authenticationmethod(CONFIG_FILE, "Forms")
