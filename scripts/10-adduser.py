@@ -10,8 +10,7 @@ import xml.etree.ElementTree as ET
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 CONFIG_FILE = '/config/config.xml'
-RADARR_URL = 'http://localhost:9393'
-RADARR_DB = 'prowlarr.db'
+PROWLARR_DB = 'prowlarr.db'
 
 
 ###########################################################
@@ -69,10 +68,10 @@ def set_credential(database, username, password):
 ###########################################################
 if __name__ == '__main__':
     logging.info("Get environment variable")
-    PROWLARR_USER = os.environ.get('RADARR_USER')
-    PROWLARR_PASSWORD = os.environ.get('RADARR_PASSWORD')
-    PROWLARR_APIKEY = os.environ.get('RADARR_APIKEY')
+    PROWLARR_USER = os.environ.get('PROWLARR_USER')
+    PROWLARR_PASSWORD = os.environ.get('PROWLARR_PASSWORD')
+    PROWLARR_APIKEY = os.environ.get('PROWLARR_APIKEY')
 
-    logging.info("Set Credential to application for user %s ..." % RADARR_USER)
-    set_credential(RADARR_DB, RADARR_USER, RADARR_PASSWORD)
+    logging.info("Set Credential to application for user %s ..." % PROWLARR_USER)
+    set_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_PASSWORD)
     set_authenticationmethod(CONFIG_FILE, "Forms")
