@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 import os
 import sqlite3
@@ -66,12 +67,12 @@ def set_credential(database, username, password):
 ###########################################################
 # INIT CONFIG
 ###########################################################
+if __name__ == '__main__':
+    logging.info("Get environment variable")
+    PROWLARR_USER = os.environ.get('RADARR_USER')
+    PROWLARR_PASSWORD = os.environ.get('RADARR_PASSWORD')
+    PROWLARR_APIKEY = os.environ.get('RADARR_APIKEY')
 
-logging.info("Get environment variable")
-PROWLARR_USER = os.environ.get('RADARR_USER')
-PROWLARR_PASSWORD = os.environ.get('RADARR_PASSWORD')
-PROWLARR_APIKEY = os.environ.get('RADARR_APIKEY')
-
-logging.info("Set Credential to application for user %s ..." % RADARR_USER)
-set_credential(RADARR_DB, RADARR_USER, RADARR_PASSWORD)
-set_authenticationmethod(CONFIG_FILE, "Forms")
+    logging.info("Set Credential to application for user %s ..." % RADARR_USER)
+    set_credential(RADARR_DB, RADARR_USER, RADARR_PASSWORD)
+    set_authenticationmethod(CONFIG_FILE, "Forms")
