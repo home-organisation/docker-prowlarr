@@ -8,7 +8,7 @@ import logging
 # SET STATIC CONFIG
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
-PROWLARR_DB = 'prowlarr.db'
+PROWLARR_DB = '/config/prowlarr.db'
 PROWLARR_PROXYURL = "http://localhost:8191"
 PROWLARR_PROXYNAME = "FlareSolverr"
 PROWLARR_PROXYTAG = "flare"
@@ -87,7 +87,7 @@ def update_proxy(database, name, url, tag):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    logging.info("Set FlareSolverr Indexer Proxy %s to application ..." % PROWLARR_PROXYURL)
+    logging.info("Set Indexer Proxy <%s> with url %s to application ..." % (PROWLARR_PROXYNAME, PROWLARR_PROXYURL))
     message = get_proxy(PROWLARR_DB, PROWLARR_PROXYNAME)
     if message is None:
         sys.exit(1)

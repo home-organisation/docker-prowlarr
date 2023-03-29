@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 # SET STATIC CONFIG
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
-CONFIG_FILE = 'config.xml'
+CONFIG_FILE = '/config/config.xml'
 
 
 ###########################################################
