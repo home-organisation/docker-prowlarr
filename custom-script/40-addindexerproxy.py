@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-import os
+import json
 import sqlite3
 import logging
 
@@ -8,16 +8,18 @@ import logging
 # SET STATIC CONFIG
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
-PROWLARR_DB = '/config/prowlarr.db'
+PROWLARR_DB = 'prowlarr.db'
+PROWLARR_PROXYURL = "http://localhost:8191"
+PROWLARR_PROXYNAME = "FlareSolverr"
+PROWLARR_PROXYTAG = "flare"
 
 
 ###########################################################
 # DEFINE FUNCTION
 ###########################################################
-def set_credential(database, username, password):
-    # Create user in database
-    data = ('652bf21b-fe69-47f7-8e52-80e0572a9025', username, password)
-    query = "INSERT INTO Users (Identifier,Username,Password) VALUES(?, ?, ?)"
+def set_proxy(database, name, url, tag):
+    data = (name, '{ "host": "' + url + '",  "requestTimeout": 60}', "FlareSolverr", "FlareSolverrSettings", tag)
+    query = "INSERT INTO IndexerProxies (Name,Settings,Implementation,ConfigContract,Tags) VALUES(?, ?, ?, ?, ?)"
     connexion = sqlite3.connect(database)
     db = connexion.cursor()
 
@@ -31,12 +33,12 @@ def set_credential(database, username, password):
         logging.error('SQLite error: %s' % (' '.join(er.args)))
         return None
     else:
-        return password
+        return name
 
 
-def get_credential(database, username):
-    data = (username,)
-    query = "SELECT Password FROM Users WHERE Username = ?"
+def get_proxy(database, name):
+    data = (name,)
+    query = "SELECT * FROM IndexerProxies WHERE Name = ?"
 
     connexion = sqlite3.connect(database)
     db = connexion.cursor()
@@ -56,12 +58,14 @@ def get_credential(database, username):
     except ValueError:
         return ""
     else:
-        return rows[0][0]
+        TAG = rows[0][5]
+        URL = json.loads(rows[0][2])["host"]
+        return {"url": URL, "tag": TAG}
 
 
-def update_credential(database, username, password):
-    data = (password, username)
-    query = "UPDATE Users SET Password = ? WHERE Username = ?"
+def update_proxy(database, name, url, tag):
+    data = ('{ "host": "' + url + '",  "requestTimeout": 60}', tag, name)
+    query = "UPDATE IndexerProxies SET Settings = ?, Tags = ? WHERE Name = ?"
 
     connexion = sqlite3.connect(database)
     db = connexion.cursor()
@@ -76,29 +80,23 @@ def update_credential(database, username, password):
         logging.error('SQLite error: %s' % (' '.join(er.args)))
         return None
     else:
-        return password
+        return name
 
 
 ###########################################################
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    PROWLARR_USER = os.environ.get('PROWLARR_USER')
-    PROWLARR_PASSWORD = os.environ.get('PROWLARR_PASSWORD')
-    if PROWLARR_USER is None or PROWLARR_PASSWORD is None:
-        logging.warning("PROWLARR_USER or PROWLARR_PASSWORD with no value, nothing to do")
-        sys.exit(0)
-
-    logging.info("Set Credential to application for user %s ..." % PROWLARR_USER)
-    PASSWORD = get_credential(PROWLARR_DB, PROWLARR_USER)
-    if PASSWORD is None:
+    logging.info("Set FlareSolverr Indexer Proxy %s to application ..." % PROWLARR_PROXYURL)
+    message = get_proxy(PROWLARR_DB, PROWLARR_PROXYNAME)
+    if message is None:
         sys.exit(1)
-    elif PASSWORD == "":
-        PASSWORD = set_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_PASSWORD)
-        if PASSWORD is None:
+    elif message == "":
+        message = set_proxy(PROWLARR_DB, PROWLARR_PROXYNAME, PROWLARR_PROXYURL, PROWLARR_PROXYTAG)
+        if message is None:
             sys.exit(1)
-    elif PASSWORD != PROWLARR_PASSWORD:
-        logging.info("User %s already exist but with an other password, update ..." % PROWLARR_USER)
-        PASSWORD = update_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_PASSWORD)
-        if PASSWORD is None:
+    elif message["url"] != PROWLARR_PROXYURL or message["tag"] != PROWLARR_PROXYTAG:
+        logging.info("FlareSolver Indexer Proxy already exist but with another value, update")
+        message = update_proxy(PROWLARR_DB, PROWLARR_PROXYNAME, PROWLARR_PROXYURL, PROWLARR_PROXYTAG)
+        if message is None:
             sys.exit(1)
