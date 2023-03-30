@@ -21,7 +21,7 @@ type: Opaque
 ```
 *prowlarr-secret need an encrypted password, check in database in table "Users" after GUI password set to retrieve it*
 
-### Deploy Prowlarr
+### Deploy Prowlarr with flareSolverr
 ```yaml
       containers:
         - image: quay.io/bizalu/prowlarr:latest
