@@ -9,9 +9,6 @@ import logging
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 PROWLARR_DB = '/config/prowlarr.db'
-PROWLARR_PROXYURL = "http://localhost:8191"
-PROWLARR_PROXYNAME = "FlareSolverr"
-PROWLARR_PROXYTAG = "flare"
 
 
 ###########################################################
@@ -152,6 +149,13 @@ def get_indexerproxy(database, name):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
+    PROWLARR_PROXYURL = os.environ.get('PROWLARR_PROXYURL')
+    PROWLARR_PROXYNAME = os.environ.get('PROWLARR_PROXYNAME')
+    PROWLARR_PROXYTAG = os.environ.get('PROWLARR_PROXYTAG')
+    if PROWLARR_PROXYURL is None or PROWLARR_PROXYNAME is None or PROWLARR_PROXYTAG is None:
+        logging.warning("PROWLARR_PROXYURL, PROWLARR_PROXYNAME or PROWLARR_PROXYTAG with no value, nothing to do")
+        sys.exit(0)
+
     logging.info("Set Indexer Proxy <%s> with url %s and tag <%s> to application ..." % (
     PROWLARR_PROXYNAME, PROWLARR_PROXYURL, PROWLARR_PROXYTAG))
     message = get_indexerproxy(PROWLARR_DB, PROWLARR_PROXYNAME)
