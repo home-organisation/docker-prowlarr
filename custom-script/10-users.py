@@ -3,12 +3,13 @@ import sys
 import os
 import sqlite3
 import logging
+import hashlib
 
 ###########################################################
 # SET STATIC CONFIG
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
-PROWLARR_DB = '/config/prowlarr.db'
+PROWLARR_DB = 'config/prowlarr.db'
 
 
 ###########################################################
@@ -90,15 +91,16 @@ if __name__ == '__main__':
         sys.exit(0)
 
     logging.info("Set Credential to application for user %s ..." % PROWLARR_USER)
+    PROWLARR_ENCRYPT = hashlib.sha256(PROWLARR_PASSWORD.encode('utf-8')).hexdigest()
     PASSWORD = get_credential(PROWLARR_DB, PROWLARR_USER)
     if PASSWORD is None:
         sys.exit(1)
     elif PASSWORD == "":
-        PASSWORD = set_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_PASSWORD)
+        PASSWORD = set_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_ENCRYPT)
         if PASSWORD is None:
             sys.exit(1)
-    elif PASSWORD != PROWLARR_PASSWORD:
+    elif PASSWORD != PROWLARR_ENCRYPT:
         logging.info("User %s already exist but with an other password, update ..." % PROWLARR_USER)
-        PASSWORD = update_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_PASSWORD)
+        PASSWORD = update_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_ENCRYPT)
         if PASSWORD is None:
             sys.exit(1)
