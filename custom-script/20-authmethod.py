@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import logging
 import sys
+import os
 import xml.etree.ElementTree as ET
 
 ###########################################################
@@ -36,7 +37,12 @@ def set_authenticationmethod(file, method):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    logging.info("Set authentication method <Forms> to application ...")
-    message = set_authenticationmethod(CONFIG_FILE, "Forms")
+    PROWLARR_AUTHMETHOD = os.environ.get('PROWLARR_AUTHMETHOD')
+    if PROWLARR_AUTHMETHOD is None or PROWLARR_AUTHMETHOD not in ["Forms", "Basic"] :
+        logging.warning("PROWLARR_AUTHMETHOD <%s> is empty or has unaccepted value (Forms or Basic), nothing to do" % PROWLARR_AUTHMETHOD)
+        sys.exit(0)
+
+    logging.info("Set authentication method <%s> to application ..." % PROWLARR_AUTHMETHOD)
+    message = set_authenticationmethod(CONFIG_FILE, PROWLARR_AUTHMETHOD)
     if message is None:
         sys.exit(1)

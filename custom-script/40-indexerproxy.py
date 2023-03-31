@@ -18,7 +18,8 @@ PROWLARR_PROXYTAG = "flare"
 # DEFINE FUNCTION
 ###########################################################
 def set_proxy(database, name, url, tagid):
-    data = (name, '{ "host": "' + url + '",  "requestTimeout": 60}', "FlareSolverr", "FlareSolverrSettings", '[' + str(tagid) + ']')
+    data = (name, '{ "host": "' + url + '",  "requestTimeout": 60}', "FlareSolverr", "FlareSolverrSettings",
+            '[' + str(tagid) + ']')
     query = "INSERT INTO IndexerProxies (Name,Settings,Implementation,ConfigContract,Tags) VALUES(?, ?, ?, ?, ?)"
     connexion = sqlite3.connect(database)
     db = connexion.cursor()
@@ -147,29 +148,12 @@ def get_indexerproxy(database, name):
         return {"url": URL, "tagID": TAGID, "tag": rows[0][1]}
 
 
-def delete_indexerproxy(database):
-    query1 = "DELETE FROM Tags"
-    query2 = "DELETE FROM IndexerProxies"
-
-    connexion = sqlite3.connect(database)
-    db = connexion.cursor()
-
-    try:
-        db.execute(query1)
-        db.execute(query2)
-        connexion.commit()
-
-        db.close()
-        connexion.close()
-    except sqlite3.Error as er:
-        logging.error('SQLite error: %s' % (' '.join(er.args)))
-
-
 ###########################################################
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    logging.info("Set Indexer Proxy <%s> with url %s and tag <%s> to application ..." % (PROWLARR_PROXYNAME, PROWLARR_PROXYURL, PROWLARR_PROXYTAG))
+    logging.info("Set Indexer Proxy <%s> with url %s and tag <%s> to application ..." % (
+    PROWLARR_PROXYNAME, PROWLARR_PROXYURL, PROWLARR_PROXYTAG))
     message = get_indexerproxy(PROWLARR_DB, PROWLARR_PROXYNAME)
     if message is None:
         sys.exit(1)
@@ -189,5 +173,3 @@ if __name__ == '__main__':
         logging.info("FlareSolver Indexer Proxy already exist but with another value, update")
         message["url"] = update_proxy(PROWLARR_DB, PROWLARR_PROXYNAME, PROWLARR_PROXYURL, message["tagID"])
         message["tag"] = update_tags(PROWLARR_DB, PROWLARR_PROXYTAG, message["tagID"])
-
-
