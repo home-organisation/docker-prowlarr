@@ -39,8 +39,8 @@ def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid, in
                   "tagid": tagid, "appid": appid, "indexerid": indexerid}
 
     remoteid = 1
-    for id in indexerid:
-        data = (id, appid, remoteid)
+    for rid in indexerid:
+        data = (rid, appid, remoteid)
         query = "INSERT INTO ApplicationIndexerMapping (IndexerId,AppId,RemoteIndexerId) VALUES(?,?,?)"
 
         connexion = sqlite3.connect(database)
@@ -160,11 +160,11 @@ def get_sonarr(database, name, tag):
         except ValueError:
             sonarr["indexerid"] = ""
         else:
-            id = []
+            sid = []
             for row in rows:
                 if str(sonarr["tagid"]) in row[10]:
-                    id.append(row[0])
-            sonarr["indexerid"] = id
+                    sid.append(row[0])
+            sonarr["indexerid"] = sid
 
     return sonarr
 
@@ -173,11 +173,11 @@ def get_sonarr(database, name, tag):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    PROWLARR_URL = "http://prowlarr"  # os.environ.get('PROWLARR_URL')
-    SONARR_URL = "http://sonarr"  # os.environ.get('SONARR_URL')
-    SONARR_NAME = "TVShowsss"  # os.environ.get('SONARR_NAME')
-    SONARR_APIKEY = "toto"  # os.environ.get('SONARR_APIKEY')
-    PROWLARR_PROXYTAG = "flare"  # os.environ.get('PROWLARR_PROXYTAG')
+    PROWLARR_URL = os.environ.get('PROWLARR_URL')
+    SONARR_URL = os.environ.get('SONARR_URL')
+    SONARR_NAME = os.environ.get('SONARR_NAME')
+    SONARR_APIKEY = os.environ.get('SONARR_APIKEY')
+    PROWLARR_PROXYTAG = os.environ.get('PROWLARR_PROXYTAG')
     if PROWLARR_URL is None or SONARR_URL is None or SONARR_NAME is None or SONARR_APIKEY is None or \
             PROWLARR_PROXYTAG is None:
         logging.warning("PROWLARR_URL, SONARR_URL, SONARR_NAME, SONARR_APIKEY or PROWLARR_PROXYTAG with no "
