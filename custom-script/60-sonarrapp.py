@@ -15,7 +15,7 @@ PROWLARR_DB = '/config/prowlarr.db'
 ###########################################################
 # DEFINE FUNCTION
 ###########################################################
-def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid, indexerid):
+def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid):
     data = (name, 'Sonarr', '{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + sonarrurl + '", "apiKey": "'
             + sonarrkey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070]}',
             'SonarrSettings', 2, '[' + str(tagid) + ']')
@@ -26,7 +26,6 @@ def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid, in
 
     try:
         db.execute(query, data)
-        appid = db.lastrowid
         connexion.commit()
 
         db.close()
@@ -35,33 +34,10 @@ def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid, in
         logging.error('SQLite error: %s' % (' '.join(er.args)))
         return None
     else:
-        sonarr = {"prowlarrurl": prowlarrurl, "sonarrurl": sonarrurl, "sonarrkey": sonarrkey, "tag": tag,
-                  "tagid": tagid, "appid": appid, "indexerid": indexerid}
-
-    remoteid = 1
-    for id in indexerid:
-        data = (id, appid, remoteid)
-        query = "INSERT INTO ApplicationIndexerMapping (IndexerId,AppId,RemoteIndexerId) VALUES(?,?,?)"
-
-        connexion = sqlite3.connect(database)
-        db = connexion.cursor()
-
-        try:
-            db.execute(query, data)
-            connexion.commit()
-
-            db.close()
-            connexion.close()
-        except sqlite3.Error as er:
-            logging.error('SQLite error: %s' % (' '.join(er.args)))
-            return None
-        else:
-            remoteid += 1
-
-    return sonarr
+        return {"prowlarrurl": prowlarrurl, "sonarrurl": sonarrurl, "sonarrkey": sonarrkey, "tag": tag, "tagid": tagid}
 
 
-def update_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid, indexerid):
+def update_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid):
     data = ('{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + sonarrurl + '", "apiKey": "'
             + sonarrkey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070]}',
             '[' + str(tagid) + ']', name)
@@ -72,7 +48,6 @@ def update_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid,
 
     try:
         db.execute(query, data)
-        appid = db.lastrowid
         connexion.commit()
 
         db.close()
@@ -81,8 +56,7 @@ def update_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid,
         logging.error('SQLite error: %s' % (' '.join(er.args)))
         return None
     else:
-        return {"prowlarrurl": prowlarrurl, "sonarrurl": sonarrurl, "sonarrkey": sonarrkey, "tag": tag, "tagid": tagid,
-                "appid": appid, "indexerid": indexerid}
+        return {"prowlarrurl": prowlarrurl, "sonarrurl": sonarrurl, "sonarrkey": sonarrkey, "tag": tag, "tagid": tagid}
 
 
 def get_sonarr(database, name, tag):
@@ -106,12 +80,11 @@ def get_sonarr(database, name, tag):
         logging.error('SQLite error: %s' % (' '.join(er.args)))
         return None
     except ValueError:
-        sonarr = {"prowlarrurl": "", "sonarrurl": "", "sonarrkey": "", "tag": "", "tagid": "", "appid": "",
-                  "indexerid": ""}
+        sonarr = {"prowlarrurl": "", "sonarrurl": "", "sonarrkey": "", "tag": "", "tagid": ""}
     else:
         row = json.loads(rows[0][3])
         sonarr = {"prowlarrurl": row["prowlarrUrl"], "sonarrurl": row["baseUrl"], "sonarrkey": row["apiKey"],
-                  "tag": "", "tagid": "", "appid": rows[0][0], "indexerid": ""}
+                  "tag": "", "tagid": ""}
 
     # Get Tag id from name from database
     data = (tag,)
@@ -139,33 +112,6 @@ def get_sonarr(database, name, tag):
         sonarr["tag"] = rows[0][1]
         sonarr["tagid"] = rows[0][0]
 
-        # Get id from Indexers from database
-        query = "SELECT * FROM Indexers"
-
-        connexion = sqlite3.connect(database)
-        db = connexion.cursor()
-
-        try:
-            db.execute(query)
-            rows = db.fetchall()
-
-            db.close()
-            connexion.close()
-
-            if not rows:
-                raise ValueError
-        except sqlite3.Error as er:
-            logging.error('SQLite error: %s' % (' '.join(er.args)))
-            return None
-        except ValueError:
-            sonarr["indexerid"] = ""
-        else:
-            id = []
-            for row in rows:
-                if str(sonarr["tagid"]) in row[10]:
-                    id.append(row[0])
-            sonarr["indexerid"] = id
-
     return sonarr
 
 
@@ -173,11 +119,11 @@ def get_sonarr(database, name, tag):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    PROWLARR_URL = "http://prowlarr"  # os.environ.get('PROWLARR_URL')
-    SONARR_URL = "http://sonarr"  # os.environ.get('SONARR_URL')
-    SONARR_NAME = "TVShowsss"  # os.environ.get('SONARR_NAME')
-    SONARR_APIKEY = "toto"  # os.environ.get('SONARR_APIKEY')
-    PROWLARR_PROXYTAG = "flare"  # os.environ.get('PROWLARR_PROXYTAG')
+    PROWLARR_URL = os.environ.get('PROWLARR_URL')
+    SONARR_URL = os.environ.get('SONARR_URL')
+    SONARR_NAME = os.environ.get('SONARR_NAME')
+    SONARR_APIKEY = os.environ.get('SONARR_APIKEY')
+    PROWLARR_PROXYTAG = os.environ.get('PROWLARR_PROXYTAG')
     if PROWLARR_URL is None or SONARR_URL is None or SONARR_NAME is None or SONARR_APIKEY is None or \
             PROWLARR_PROXYTAG is None:
         logging.warning("PROWLARR_URL, SONARR_URL, SONARR_NAME, SONARR_APIKEY or PROWLARR_PROXYTAG with no "
@@ -196,7 +142,7 @@ if __name__ == '__main__':
 
     if message["prowlarrurl"] == "" and message["sonarrurl"] == "" and message["sonarrkey"] == "":
         message = set_sonarr(PROWLARR_DB, SONARR_NAME, PROWLARR_URL, SONARR_URL, SONARR_APIKEY, PROWLARR_PROXYTAG,
-                             message["tagid"], message["indexerid"])
+                             message["tagid"])
         if message is None:
             sys.exit(1)
 
@@ -204,6 +150,6 @@ if __name__ == '__main__':
             message["sonarrkey"] != SONARR_APIKEY or message["tag"] != PROWLARR_PROXYTAG:
         logging.info("Sonarr Application already exist but with another value, update")
         message = update_sonarr(PROWLARR_DB, SONARR_NAME, PROWLARR_URL, SONARR_URL, SONARR_APIKEY, PROWLARR_PROXYTAG,
-                                message["tagid"], message["indexerid"])
+                                message["tagid"])
         if message is None:
             sys.exit(1)
