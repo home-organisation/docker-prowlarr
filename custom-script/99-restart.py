@@ -7,7 +7,7 @@ import sqlite3
 # SET STATIC CONFIG
 ###########################################################
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
-PROWLARR_DB = 'config/prowlarr.db'
+PROWLARR_DB = '/config/prowlarr.db'
 
 
 ###########################################################
