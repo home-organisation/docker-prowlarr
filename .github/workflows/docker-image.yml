@@ -35,6 +35,7 @@ jobs:
 
   dev:
     name: Promote image to dev and stage
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Gitops release to dev
