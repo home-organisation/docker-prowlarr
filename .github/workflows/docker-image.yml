@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag prowlarr:${{ env.GIT_COMMIT_SHORT_SHA }}
+      
+    - name: Push To Registry
+      uses: redhat-actions/push-to-registry@v2.7
+      with:
+        image: bizalu/prowlarr
+        tags: latest ${{ env.GIT_COMMIT_SHORT_SHA }} main
+        registry: quay.io/bizalu
+        username: ${{ secrets.QUAY_ID }}
+        password: ${{ secrets.QUAY_PASSWD }}
