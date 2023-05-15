@@ -18,7 +18,7 @@ jobs:
     - name: Push To Registry
       uses: redhat-actions/push-to-registry@v2.7
       with:
-        image: bizalu/prowlarr
+        image: prowlarr
         tags: latest ${{ github.sha }}
         registry: quay.io/bizalu
         username: ${{ secrets.QUAY_ID }}
