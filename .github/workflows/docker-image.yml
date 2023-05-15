@@ -46,8 +46,8 @@ jobs:
         value: quay.io/bizalu/prowlarr:${{ github.sha }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         github-org-and-repo: home-organisation/home-deploy-media
-        github-username: gitops
-        github-user-mail: gitops@github.com
+        github-username: bizalu
+        github-user-mail: chprok@gmail.com
     
     - name: Gitops release to stage
       uses: DenisPalnitsky/gitops-release@v10
@@ -57,7 +57,7 @@ jobs:
         value: quay.io/bizalu/prowlarr:${{ github.sha }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         github-org-and-repo: home-organisation/home-deploy-media
-        github-username: gitops
-        github-user-mail: gitops@github.com
+        github-username: bizalu
+        github-user-mail: chprok@gmail.com
         
 
