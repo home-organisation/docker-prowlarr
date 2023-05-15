@@ -6,6 +6,12 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+env:
+  DEPLOY_REPO: https://github.com/home-organisation/home-deploy-media.git
+  DEV_IMAGE_FILE: home-deploy-media/environments/dev/prowlarr/prowlarr-image.yaml
+  STAGE_IMAGE_FILE: home-deploy-media/environments/stage/prowlarr/prowlarr-image.yaml
+  PROD_IMAGE_FILE: home-deploy-media/environments/prod/prowlarr/prowlarr-image.yaml
+
 jobs:
   build:
     name: Build and push image to quay
@@ -38,26 +44,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Gitops release to dev
-      uses: DenisPalnitsky/gitops-release@v10
-      with:
-        filename: environments/dev/prowlarr/prowlarr-image.yaml
-        key: image
-        value: quay.io/bizalu/prowlarr:${{ github.sha }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        github-org-and-repo: home-organisation/home-deploy-media
-        github-username: bizalu
-        github-user-mail: chprok@gmail.com
+    - name: Clone and patch image tag
+      run: |
+        git config --global user.email gitops@github.com
+        git config --global user.name gitops
+        git clone ${{ DEPLOY_REPO }}
+        yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} ${{ DEV_IMAGE_FILE }}
+        git add .
+        git commit -m "Update prowlarr image to dev"
+        git push
     
-    - name: Gitops release to stage
-      uses: DenisPalnitsky/gitops-release@v10
-      with:
-        filename: environments/stage/prowlarr/prowlarr-image.yaml
-        key: image
-        value: quay.io/bizalu/prowlarr:${{ github.sha }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        github-org-and-repo: home-organisation/home-deploy-media
-        github-username: bizalu
-        github-user-mail: chprok@gmail.com
         
 
