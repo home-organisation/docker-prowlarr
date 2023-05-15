@@ -46,8 +46,8 @@ jobs:
     steps:
     - name: Clone and patch image tag
       run: |
-        git config --global user.email gitops@github.com
-        git config --global user.name gitops
+        git config --global user.email "chprok@gmail.com"
+        git config --global user.name "bizalu"
         git clone $DEPLOY_REPO
         yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} $DEV_IMAGE_FILE
         git add .
