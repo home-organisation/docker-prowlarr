@@ -33,5 +33,5 @@ jobs:
         username: ${{ secrets.QUAY_ID }}
         password: ${{ secrets.QUAY_PASSWD }}
 
-    - name: Print image url
+    - name: Print image info
       run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
