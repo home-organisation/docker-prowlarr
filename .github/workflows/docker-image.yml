@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.QUAY_ID }}
         password: ${{ secrets.QUAY_PASSWD }}
 
-  dev:
+  promote:
     name: Promote image to dev and stage
     needs: build
     runs-on: ubuntu-latest
@@ -46,6 +46,8 @@ jobs:
         value: quay.io/bizalu/prowlarr:${{ github.sha }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         github-org-and-repo: home-organisation/home-deploy-media
+        github-username: gitops
+        github-user-mail: gitops@github.com
     
     - name: Gitops release to stage
       uses: DenisPalnitsky/gitops-release@v10
@@ -55,4 +57,7 @@ jobs:
         value: quay.io/bizalu/prowlarr:${{ github.sha }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         github-org-and-repo: home-organisation/home-deploy-media
+        github-username: gitops
+        github-user-mail: gitops@github.com
+        
 
