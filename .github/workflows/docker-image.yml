@@ -33,11 +33,23 @@ jobs:
         username: ${{ secrets.QUAY_ID }}
         password: ${{ secrets.QUAY_PASSWD }}
 
+  dev:
+    name: Promote image to dev and stage
+    runs-on: ubuntu-latest
+    steps:
     - name: Gitops release to dev
       uses: DenisPalnitsky/gitops-release@v10
       with:
-        # Filename to update
         filename: environments/dev/prowlarr/prowlarr-image.yaml
+        key: image
+        value: quay.io/bizalu/prowlarr:${{ github.sha }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-org-and-repo: home-organisation/home-deploy-media
+    
+    - name: Gitops release to stage
+      uses: DenisPalnitsky/gitops-release@v10
+      with:
+        filename: environments/stage/prowlarr/prowlarr-image.yaml
         key: image
         value: quay.io/bizalu/prowlarr:${{ github.sha }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
