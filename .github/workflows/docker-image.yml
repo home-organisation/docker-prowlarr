@@ -43,6 +43,8 @@ jobs:
     name: Promote image to dev and stage
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - name: Clone and patch image tag
       run: |
