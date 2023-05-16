@@ -45,12 +45,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    steps:
+    steps:      
     - name: Clone and patch image tag
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
-        git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/$DEPLOY_REPO
+        git clone https://$GITHUB_TOKEN@github.com/$DEPLOY_REPO
         yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} $DEV_IMAGE_FILE
         git add .
         git commit -m "Update prowlarr image to dev with tag ${{ github.sha }}"
