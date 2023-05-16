@@ -7,7 +7,7 @@ on:
     - cron: '0 0 * * *'
 
 env:
-  DEPLOY_REPO: https://bizalu:${{ GITHUB_TOKEN }}@github.com/home-organisation/home-deploy-media.git
+  DEPLOY_REPO: home-organisation/home-deploy-media.git
   DEV_IMAGE_FILE: home-deploy-media/environments/dev/prowlarr/prowlarr-image.yaml
   STAGE_IMAGE_FILE: home-deploy-media/environments/stage/prowlarr/prowlarr-image.yaml
   PROD_IMAGE_FILE: home-deploy-media/environments/prod/prowlarr/prowlarr-image.yaml
@@ -48,7 +48,7 @@ jobs:
       run: |
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
-        git clone $DEPLOY_REPO
+        git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/$DEPLOY_REPO
         yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} $DEV_IMAGE_FILE
         git add .
         git commit -m "Update prowlarr image to dev with tag ${{ github.sha }}"
