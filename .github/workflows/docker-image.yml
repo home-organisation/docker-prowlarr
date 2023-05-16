@@ -42,14 +42,13 @@ jobs:
     steps:      
     - name: Clone and patch image tag
       env:
-        TOKEN: ${{ github.token }}
         ORGA: home-organisation
         REPO: home-deploy-media
         FILE: environments/dev/prowlarr/prowlarr-image.yaml
       run: |
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
-        git clone https://bizalu:${{ env.TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
+        git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
         yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} ${{ env.REPO }}/${{ env.FILE }}
         git add .
         git commit -m "Update prowlarr image to dev with tag ${{ github.sha }}"
