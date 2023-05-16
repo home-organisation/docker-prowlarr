@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
     paths-ignore:
       - '**.md'
-      # - '.github/**'
+      - '.github/**'
   schedule:
     - cron: '0 0 */7 * *'
 
@@ -55,7 +55,7 @@ jobs:
         
     - name: Patch dev image tag
       env:
-        FILE: environments/dev/prowlarr/prowlarr-image.yaml
+        FILE: environments/dev/${{ env.REGISTRY_REPO }}/${{ env.REGISTRY_REPO }}-image.yaml
       run: |
         cd ${{ env.GIT_REPO }}
         yq e -i '.spec.template.spec.containers[0].image = "${{ env.REGISTRY_NAME }}/${{ env.REGISTRY_REPO }}:${{ github.sha }}"' ${{ env.FILE }}
@@ -64,7 +64,7 @@ jobs:
         
     - name: Patch stage image tag
       env:
-        FILE: environments/stage/prowlarr/prowlarr-image.yaml
+        FILE: environments/stage/${{ env.REGISTRY_REPO }}/${{ env.REGISTRY_REPO }}-image.yaml
       run: |
         cd ${{ env.GIT_REPO }}
         yq e -i '.spec.template.spec.containers[0].image = "${{ env.REGISTRY_NAME }}/${{ env.REGISTRY_REPO }}:${{ github.sha }}"' ${{ env.FILE }}
@@ -84,7 +84,7 @@ jobs:
         
     - name: Patch prod image tag into new branch
       env:
-        FILE: environments/prod/prowlarr/prowlarr-image.yaml
+        FILE: environments/prod/${{ env.REGISTRY_REPO }}/${{ env.REGISTRY_REPO }}-image.yaml
         GH_TOKEN: ${{ secrets.GIT_TOKEN }}
       run: |
         cd ${{ env.GIT_REPO }}
