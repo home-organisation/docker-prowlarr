@@ -92,4 +92,4 @@ jobs:
           git commit -a -m "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}"
           git push -u origin "${{ env.IMAGE }}-${{ github.sha }}"
           
-          gh pr create -B "${{ env.IMAGE }}-${{ github.sha }}" -H main --title "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}" --body 'Created by Github action' 
+          gh pr create -B main -H "${{ env.IMAGE }}-${{ github.sha }}" --title "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}" --body 'Created by Github action' 
