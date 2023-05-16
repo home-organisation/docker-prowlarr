@@ -39,32 +39,31 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    steps:      
-    - name: Clone and patch dev image tag
+    steps:
+    - name: Clone repository
       env:
         ORGA: home-organisation
         REPO: home-deploy-media
-        FILE: environments/dev/prowlarr/prowlarr-image.yaml
-        IMAGE: quay.io/bizalu/prowlarr
       run: |
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
         git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
+        
+    - name: Patch dev image tag
+      env:
+        FILE: environments/dev/prowlarr/prowlarr-image.yaml
+        IMAGE: quay.io/bizalu/prowlarr
+      run: |
         cd ${{ env.REPO }}
         yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
         git commit -a -m "Update ${{ env.IMAGE }} to dev with tag ${{ github.sha }}"
         git push
         
-    - name: Clone and patch stage image tag
+    - name: Patch stage image tag
       env:
-        ORGA: home-organisation
-        REPO: home-deploy-media
         FILE: environments/stage/prowlarr/prowlarr-image.yaml
         IMAGE: quay.io/bizalu/prowlarr
       run: |
-        git config --global user.email "gitops@github.com"
-        git config --global user.name "gitops"
-        git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
         cd ${{ env.REPO }}
         yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
         git commit -a -m "Update ${{ env.IMAGE }} to dev with tag ${{ github.sha }}"
