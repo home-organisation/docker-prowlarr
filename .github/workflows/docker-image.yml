@@ -66,5 +66,28 @@ jobs:
         git commit -a -m "Update ${{ env.IMAGE }} to stage with tag ${{ github.sha }}"
         git push
     
+  notify:
+    name: Promote image to prod
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      ORGA: home-organisation
+      REPO: home-deploy-media
+      IMAGE: quay.io/bizalu/prowlarr
+    steps:
+    - name: Clone repository
+      run: |
+        git config --global user.email "gitops@github.com"
+        git config --global user.name "gitops"
+        git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
         
-
+    - name: Patch prod image tag into new branch
+      env:
+        FILE: environments/stage/prowlarr/prowlarr-image.yaml
+      run: |
+          cd ${{ env.REPO }}
+          yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
+          git checkout -b "${{ env.IMAGE }}-${{ github.sha }}"
+          git commit -a -m "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}"
+          git push
+          gh pr create -B "${{ env.IMAGE }}-${{ github.sha }}" -H main --title "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}" --body 'Created by Github action' 
