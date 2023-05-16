@@ -6,12 +6,6 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
-env:
-  DEPLOY_REPO: home-organisation/home-deploy-media.git
-  DEV_IMAGE_FILE: home-deploy-media/environments/dev/prowlarr/prowlarr-image.yaml
-  STAGE_IMAGE_FILE: home-deploy-media/environments/stage/prowlarr/prowlarr-image.yaml
-  PROD_IMAGE_FILE: home-deploy-media/environments/prod/prowlarr/prowlarr-image.yaml
-
 jobs:
   build:
     name: Build and push image to quay
@@ -48,12 +42,15 @@ jobs:
     steps:      
     - name: Clone and patch image tag
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        TOKEN: ${{ github.token }}
+        ORGA: home-organisation
+        REPO: home-deploy-media
+        FILE: environments/dev/prowlarr/prowlarr-image.yaml
       run: |
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
-        git clone https://$GITHUB_TOKEN@github.com/$DEPLOY_REPO
-        yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} $DEV_IMAGE_FILE
+        git clone https://${{ env.TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
+        yq -i .spec.template.spec.containers[0].image = ${{ github.sha }} ${{ env.REPO }}/${{ env.FILE }}
         git add .
         git commit -m "Update prowlarr image to dev with tag ${{ github.sha }}"
         git push
