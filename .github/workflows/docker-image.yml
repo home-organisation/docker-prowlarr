@@ -83,11 +83,13 @@ jobs:
         
     - name: Patch prod image tag into new branch
       env:
-        FILE: environments/stage/prowlarr/prowlarr-image.yaml
+        FILE: environments/prod/prowlarr/prowlarr-image.yaml
+        GH_TOKEN: ${{ secrets.GIT_TOKEN }}
       run: |
           cd ${{ env.REPO }}
           yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
           git checkout -b "${{ env.IMAGE }}-${{ github.sha }}"
           git commit -a -m "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}"
           git push -u origin "${{ env.IMAGE }}-${{ github.sha }}"
+          
           gh pr create -B "${{ env.IMAGE }}-${{ github.sha }}" -H main --title "Update ${{ env.IMAGE }} to prod with tag ${{ github.sha }}" --body 'Created by Github action' 
