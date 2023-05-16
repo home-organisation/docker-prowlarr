@@ -68,7 +68,7 @@ jobs:
     
   notify:
     name: Promote image to prod
-    needs: build
+    needs: promote
     runs-on: ubuntu-latest
     env:
       ORGA: home-organisation
