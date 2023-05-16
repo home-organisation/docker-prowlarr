@@ -10,8 +10,10 @@ on:
     - cron: '0 0 */7 * *'
 
 env:
-  IMAGE: prowlarr
-  REGISTRY: quay.io/bizalu
+  REGISTRY_REPO: prowlarr
+  REGISTRY_NAME: quay.io/bizalu
+  GIT_ORGA: home-organisation
+  GIT_REPO: home-deploy-media
 
 jobs:
   build:
@@ -25,7 +27,7 @@ jobs:
       id: build-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ env.IMAGE }}
+        image: ${{ env.REGISTRY_REPO }}
         tags: latest ${{ github.sha }}
         containerfiles: |
           ./Dockerfile
@@ -36,7 +38,7 @@ jobs:
       with:
         image: ${{ steps.build-image.outputs.image }}
         tags: ${{ steps.build-image.outputs.tags }}
-        registry: ${{ env.REGISTRY }}
+        registry: ${{ env.REGISTRY_NAME }}
         username: ${{ secrets.QUAY_ID }}
         password: ${{ secrets.QUAY_PASSWD }}
 
@@ -44,33 +46,29 @@ jobs:
     name: Promote image to dev and stage
     needs: build
     runs-on: ubuntu-latest
-    env:
-      ORGA: home-organisation
-      REPO: home-deploy-media
-      IMAGE: quay.io/bizalu/prowlarr
     steps:
     - name: Clone repository
       run: |
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
-        git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
+        git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.GIT_ORGA }}/${{ env.GIT_REPO }}.git
         
     - name: Patch dev image tag
       env:
         FILE: environments/dev/prowlarr/prowlarr-image.yaml
       run: |
-        cd ${{ env.REPO }}
-        yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
-        git commit -a -m "Update ${{ env.IMAGE }} to dev with tag ${{ github.sha }}"
+        cd ${{ env.GIT_REPO }}
+        yq e -i '.spec.template.spec.containers[0].image = "${{ env.REGISTRY_NAME }}/${{ env.REGISTRY_REPO }}:${{ github.sha }}"' ${{ env.FILE }}
+        git commit -a -m "Update ${{ env.REGISTRY_REPO }} to dev with tag ${{ github.sha }}"
         git push
         
     - name: Patch stage image tag
       env:
         FILE: environments/stage/prowlarr/prowlarr-image.yaml
       run: |
-        cd ${{ env.REPO }}
-        yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
-        git commit -a -m "Update ${{ env.IMAGE }} to stage with tag ${{ github.sha }}"
+        cd ${{ env.GIT_REPO }}
+        yq e -i '.spec.template.spec.containers[0].image = "${{ env.REGISTRY_NAME }}/${{ env.REGISTRY_REPO }}:${{ github.sha }}"' ${{ env.FILE }}
+        git commit -a -m "Update ${{ env.REGISTRY_REPO }} to stage with tag ${{ github.sha }}"
         git push
     
   notify:
