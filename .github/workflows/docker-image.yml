@@ -50,9 +50,9 @@ jobs:
         git config --global user.email "gitops@github.com"
         git config --global user.name "gitops"
         git clone https://${{ secrets.GIT_USER }}:${{ secrets.GIT_TOKEN }}@github.com/${{ env.ORGA }}/${{ env.REPO }}.git
-        yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.REPO }}/${{ env.FILE }}
-        git add .
-        git commit -m "Update ${{ env.IMAGE }} to dev with tag ${{ github.sha }}"
+        cd ${{ env.REPO }}
+        yq e -i '.spec.template.spec.containers[0].image = "${{ env.IMAGE }}:${{ github.sha }}"' ${{ env.FILE }}
+        git commit -a -m "Update ${{ env.IMAGE }} to dev with tag ${{ github.sha }}"
         git push
     
         
