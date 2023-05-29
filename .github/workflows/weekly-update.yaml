@@ -46,6 +46,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: set release date
+      run: |
+        echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
+
     - name: Clone repository
       run: |
         git config --global user.email "gitops@github.com"
@@ -75,6 +79,9 @@ jobs:
     needs: promote
     runs-on: ubuntu-latest
     steps:
+    - name: set release date
+      run: |
+        echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV} 
     - name: Clone repository
       run: |
         git config --global user.email "gitops@github.com"
