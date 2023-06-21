@@ -7,7 +7,6 @@ on:
       - '**.md'
       - '.github/**'
 
-
 env:
   REGISTRY_REPO: prowlarr
   REGISTRY_NAME: quay.io/bizalu
