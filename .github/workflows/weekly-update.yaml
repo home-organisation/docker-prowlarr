@@ -10,6 +10,7 @@ env:
   GIT_ORGA: home-organisation
   GIT_REPO: home-deploy-media
 
+
 jobs:
   build:
     name: Build and push image to quay
