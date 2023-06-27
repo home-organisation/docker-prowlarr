@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '0 0 */7 * *'
 
+
 env:
   REGISTRY_REPO: prowlarr
   REGISTRY_NAME: quay.io/bizalu
