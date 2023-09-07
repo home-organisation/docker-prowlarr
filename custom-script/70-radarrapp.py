@@ -83,7 +83,7 @@ def get_radarr(database, name, tag):
         radarr = {"prowlarrurl": "", "radarrurl": "", "radarrkey": "", "tag": "", "tagid": ""}
     else:
         row = json.loads(rows[0][3])
-        radarr = {"prowlarrurl": row["prowlarrUrl"], "eadarrurl": row["baseUrl"], "radarrkey": row["apiKey"],
+        radarr = {"prowlarrurl": row["prowlarrUrl"], "radarrurl": row["baseUrl"], "radarrkey": row["apiKey"],
                   "tag": "", "tagid": ""}
 
     # Get Tag id from name from database
