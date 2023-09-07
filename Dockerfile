@@ -3,7 +3,7 @@ LABEL Maintainer="bizalu"
 
 # Prepare python environment
 ENV PYTHONUNBUFFERED=1
-RUN apk add --no-cache python3
+RUN apk add --no-cache python3 py3-defusedxml
 RUN if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi
 
 # Install custom post files
