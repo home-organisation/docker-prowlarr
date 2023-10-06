@@ -10,7 +10,6 @@ from defusedxml.ElementTree import parse
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 CONFIG_FILE = '/config/config.xml'
 
-
 ###########################################################
 # DEFINE FUNCTION
 ###########################################################
