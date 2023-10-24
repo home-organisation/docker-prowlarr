@@ -11,6 +11,7 @@ import hashlib
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 PROWLARR_DB = '/config/prowlarr.db'
 
+
 ###########################################################
 # DEFINE FUNCTION
 ###########################################################
