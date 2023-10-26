@@ -21,9 +21,9 @@ def set_indexer(database, name, url, user, password, tag, tagid):
             '"multilang": false, "multilanguage": 1, "vostfr": false, "enhancedAnime": false, "enhancedAnime4": false, '
             '"sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": {}, '
             '"torrentBaseSettings": {}}',
-            'CardigannSettings', 1, 25, '2023-04-01 22:05:12.6172687Z', 0, 1, '[' + str(tagid) + ']')
+            'CardigannSettings', 1, 25, '2023-04-01 22:05:12.6172687Z', 0, 1, '[' + str(tagid) + ']', 0)
     query = "INSERT INTO Indexers (Name,Implementation,Settings,ConfigContract,Enable,Priority,Added,Redirect," \
-            "AppProfileId,Tags) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            "AppProfileId,Tags,DownloadClientId) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     connexion = sqlite3.connect(database)
     db = connexion.cursor()
 
