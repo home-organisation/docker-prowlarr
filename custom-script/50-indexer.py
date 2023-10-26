@@ -17,10 +17,10 @@ PROWLARR_DB = '/config/prowlarr.db'
 ###########################################################
 def set_indexer(database, name, url, user, password, tag, tagid):
     data = (name, 'Cardigann', '{"definitionFile": "yggtorrent", "extraFieldData": '
-            '{"username": "' + user + '", "password": "' + password + '", "category": 6, "filter_title": false, '
-            '"multilang": false, "multilanguage": 1, "vostfr": false, "enhancedAnime": false, "enhancedAnime4": false, '
-            '"sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": {}, '
-            '"torrentBaseSettings": {}}',
+            '{"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, '
+            '"multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, '
+            '"enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", '
+            '"baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}',
             'CardigannSettings', 1, 25, '2023-04-01 22:05:12.6172687Z', 0, 1, '[' + str(tagid) + ']', 0)
     query = "INSERT INTO Indexers (Name,Implementation,Settings,ConfigContract,Enable,Priority,Added,Redirect," \
             "AppProfileId,Tags,DownloadClientId) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -42,9 +42,10 @@ def set_indexer(database, name, url, user, password, tag, tagid):
 
 def update_indexer(database, name, url, user, password, tag, tagid):
     data = ('{"definitionFile": "yggtorrent", "extraFieldData": '
-            '{"username": "' + user + '", "password": "' + password + '", "category": 6, "filter_title": false, '
-            '"multilang": false, "multilanguage": 1, "vostfr": false, "enhancedAnime": false, "enhancedAnime4": false,'
-            '"sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": {}, "torrentBaseSettings": {}}',
+            '{"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, '
+            '"multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, '
+            '"enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", '
+            '"baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}',
             '[' + str(tagid) + ']', name)
     query = "UPDATE Indexers SET Settings = ?, Tags = ? WHERE Name = ?"
 
