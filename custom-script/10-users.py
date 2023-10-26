@@ -11,6 +11,7 @@ import hashlib
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 PROWLARR_DB = '/config/prowlarr.db'
 
+
 ###########################################################
 # DEFINE FUNCTION
 ###########################################################
@@ -98,8 +99,8 @@ if __name__ == '__main__':
         PASSWORD = set_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_ENCRYPT)
         if PASSWORD is None:
             sys.exit(1)
-    elif PASSWORD != PROWLARR_ENCRYPT:
-        logging.info("User %s already exist but with an other password, update ..." % PROWLARR_USER)
-        PASSWORD = update_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_ENCRYPT)
-        if PASSWORD is None:
-            sys.exit(1)
+    # elif PASSWORD != PROWLARR_ENCRYPT:
+    #    logging.info("User %s already exist but with an other password, update ..." % PROWLARR_USER)
+    #    PASSWORD = update_credential(PROWLARR_DB, PROWLARR_USER, PROWLARR_ENCRYPT)
+    #    if PASSWORD is None:
+    #        sys.exit(1)
