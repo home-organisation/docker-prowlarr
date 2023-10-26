@@ -17,8 +17,8 @@ PROWLARR_DB = '/config/prowlarr.db'
 ###########################################################
 def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid):
     data = (name, 'Sonarr', '{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + sonarrurl + '", "apiKey": "'
-            + sonarrkey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070]}',
-            'SonarrSettings', 2, '[' + str(tagid) + ']')
+            + sonarrkey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], '
+                          'syncAnimeStandardFormatSearch": true}', 'SonarrSettings', 2, '[' + str(tagid) + ']')
     query = "INSERT INTO Applications (Name,Implementation,Settings,ConfigContract,SyncLevel,Tags) " \
             "VALUES(?, ?, ?, ?, ?, ?)"
     connexion = sqlite3.connect(database)
@@ -39,8 +39,8 @@ def set_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid):
 
 def update_sonarr(database, name, prowlarrurl, sonarrurl, sonarrkey, tag, tagid):
     data = ('{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + sonarrurl + '", "apiKey": "'
-            + sonarrkey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070]}',
-            '[' + str(tagid) + ']', name)
+            + sonarrkey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], '
+                          'syncAnimeStandardFormatSearch": true}', '[' + str(tagid) + ']', name)
     query = "UPDATE Applications SET Settings = ?, Tags = ? WHERE Name = ?"
 
     connexion = sqlite3.connect(database)
