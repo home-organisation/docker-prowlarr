@@ -1,10 +1,13 @@
+#Last package update 18 November 2023
 FROM lscr.io/linuxserver/prowlarr:latest
 LABEL Maintainer="bizalu"
 
 # Prepare python environment
 ENV PYTHONUNBUFFERED=1
-RUN apk add --no-cache python3 py3-defusedxml
+RUN apk add --no-cache python3 py3-defusedxml py3-pip
 RUN apk -U upgrade --no-cache
+COPY requirements.txt /tmp
+RUN pip install -r /tmp/requirements.txt
 RUN if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi
 
 # Install custom post files
