@@ -15,8 +15,8 @@ The parameters below are taken from the original image [lscr.io/linuxserver/prow
 The extra parameters below come from this custom image :
 |  Parameters          | Examples values        | Functions                                                                                 |
 |----------------------|------------------------|-------------------------------------------------------------------------------------------|
-| PROWLARR_AUTHMETHOD  |  Forms                 | Authentication method for web authentication. Acceptable value is **Forms** or **Basic**  |
-| PROWLARR_USER        |  admin                 | Username for web authentication                                                           |
+| PROWLARR_AUTHMETHOD  |  Forms (default)       | Authentication method for web authentication. Acceptable value is **Forms** or **Basic**  |
+| PROWLARR_USER        |  admin (default)       | Username for web authentication                                                           |
 | PROWLARR_PASSWORD    |  ****                  | Password for web authentication                                                           |
 | PROWLARR_APIKEY      |  ****                  | Key for api authentication                                                                |
 | PROWLARR_PROXYURL    |  http://localhost:8191 | FlareSolverr Indexer Proxy URL                                                            |

@@ -37,7 +37,7 @@ def set_authenticationmethod(file, method):
 # INIT CONFIG
 ###########################################################
 if __name__ == '__main__':
-    PROWLARR_AUTHMETHOD = os.environ.get('PROWLARR_AUTHMETHOD')
+    PROWLARR_AUTHMETHOD = os.environ.get('PROWLARR_AUTHMETHOD') or "Forms"
     if PROWLARR_AUTHMETHOD is None or PROWLARR_AUTHMETHOD not in ["Forms", "Basic"] :
         logging.warning("PROWLARR_AUTHMETHOD <%s> is empty or has unaccepted value (Forms or Basic), nothing to do" % PROWLARR_AUTHMETHOD)
         sys.exit(0)
