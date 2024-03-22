@@ -22,3 +22,4 @@ The extra parameters below come from this custom image :
 | PROWLARR_PROXYURL    |  http://localhost:8191 | FlareSolverr Indexer Proxy URL                                                            |
 | PROWLARR_PROXYNAME   |  FlareSolverr          | FlareSolverr Indexer Proxy name                                                           |
 | PROWLARR_PROXYTAG    |  flare                 | FlareSolverr Indexer Proxy tag                                                            |
+
