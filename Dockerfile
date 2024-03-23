@@ -5,6 +5,7 @@ LABEL Maintainer="bizalu"
 # Prepare python environment
 ENV PYTHONUNBUFFERED=1
 RUN apk add --no-cache python3 py3-defusedxml py3-pip
+RUN python3 -m ensurepip
 RUN apk -U upgrade --no-cache
 COPY requirements.txt /tmp
 RUN pip install -r /tmp/requirements.txt
