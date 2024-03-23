@@ -1,4 +1,4 @@
-#Last package update 16 March 2024
+#Last package update 23 March 2024
 FROM lscr.io/linuxserver/prowlarr:latest
 LABEL Maintainer="bizalu"
 
