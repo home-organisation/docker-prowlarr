@@ -5,11 +5,8 @@ LABEL Maintainer="bizalu"
 # Prepare python environment
 ENV PYTHONUNBUFFERED=1
 RUN apk -U upgrade --no-cache
-RUN apk add --no-cache python3 py3-defusedxml py3-pip
+RUN apk add --no-cache python3 py3-defusedxml
 RUN if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi
-RUN python -m ensurepip
-COPY requirements.txt /tmp
-RUN pip install -r /tmp/requirements.txt
 
 
 # Install custom post files
