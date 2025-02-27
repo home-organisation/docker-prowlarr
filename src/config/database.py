@@ -64,8 +64,8 @@ class Database:
 
         row = self.get(query)
         if row is not None:
-            tagid = row[0][5].replace('[', '').replace(']', '')
-            url = json.loads(row[0][2])["host"]
+            tagid = row[5].replace('[', '').replace(']', '')
+            url = json.loads(row[2])["host"]
 
             query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + str(tagid) + '\''
             row = self.get(query)
@@ -108,10 +108,10 @@ class Database:
 
         row = self.get(query)
         if row is not None:
-            tagid = row[0][5].replace('[', '').replace(']', '')
-            url = json.loads(row[0][3])["baseUrl"]
-            user = json.loads(row[0][3])["extraFieldData"]["username"]
-            password = json.loads(row[0][3])["extraFieldData"]["password"]
+            tagid = row[10].replace('[', '').replace(']', '')
+            url = json.loads(row[3])["baseUrl"]
+            user = json.loads(row[3])["extraFieldData"]["username"]
+            password = json.loads(row[3])["extraFieldData"]["password"]
 
             query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + str(tagid)  + '\''
             row = self.get(query)
@@ -138,10 +138,10 @@ class Database:
 
         row = self.get(query)
         if row is not None:
-            tagid = row[0][5].replace('[', '').replace(']', '')
-            url = json.loads(row[0][3])["baseUrl"]
-            apikey = json.loads(row[0][3])["apiKey"]
-            prowlarrurl = json.loads(row[0][3])["prowlarrUrl"]
+            tagid = row[6].replace('[', '').replace(']', '')
+            url = json.loads(row[3])["baseUrl"]
+            apikey = json.loads(row[3])["apiKey"]
+            prowlarrurl = json.loads(row[3])["prowlarrUrl"]
 
             query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + str(tagid)+ '\''
             row = self.get(query)
