@@ -60,18 +60,15 @@ class Database:
             cur.close()
 
     def get_proxy (self, name: str):
-        data = (name,)
-        query = 'SELECT * FROM "IndexerProxies" WHERE "Name" = %s'
+        query = 'SELECT * FROM "IndexerProxies" WHERE "Name" = \'' + name + '\''
 
-        row = self.get(query, data)
+        row = self.get(query)
         if row is not None:
             tagid = row[0][5].replace('[', '').replace(']', '')
             url = json.loads(row[0][2])["host"]
 
-            data = (tagid,)
-            query = 'SELECT * FROM "Tags" WHERE "Id" = %s'
-
-            row = self.get(query, data)
+            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid + '\''
+            row = self.get(query)
             if row is not None:
                 tag = row[0][1]
                 return  url, tag
@@ -81,10 +78,9 @@ class Database:
             return None, None
 
     def get_tag (self, tag: str):
-        data = (tag,)
-        query = 'SELECT "Id" FROM "Tags" WHERE "Label" = %s'
+        query = 'SELECT "Id" FROM "Tags" WHERE "Label" = \'' + tag + '\''
 
-        row = self.get(query, data)
+        row = self.get(query)
         if row is not None:
             tagid = row[0][1]
             return tagid
@@ -92,39 +88,33 @@ class Database:
             return None
 
     def set_tag (self, tag: str):
-        data = (tag,)
-        query = 'INSERT INTO "Tags" ("Label") VALUES(%s)'
+        query = 'INSERT INTO "Tags" ("Label") VALUES(\'' + tag + '\')'
 
-        self.set(query, data)
+        self.set(query)
 
 
     def set_proxy (self, name: str, url: str, tagid: str):
-        data = (name, '{ "host": "' + url + '",  "requestTimeout": 60}', "FlareSolverr", "FlareSolverrSettings", '[' + str(tagid) + ']')
-        query = 'INSERT INTO "IndexerProxies" ("Name","Settings","Implementation","ConfigContract","Tags") VALUES(%s, %s, %s, %s, %s)'
+        query = 'INSERT INTO "IndexerProxies" ("Name","Settings","Implementation","ConfigContract","Tags") VALUES(\'' + name + '\', \'{ "host": "' + url + '",  "requestTimeout": 60}\', "FlareSolverr", "FlareSolverrSettings", \'[' + str(tagid) + ']\')'
 
-        self.set(query, data)
+        self.set(query)
 
     def update_proxy (self, name: str, url: str, tagid: str):
-        data = ('{ "host": "' + url + '",  "requestTimeout": 60}', '[' + str(tagid) + ']', name)
-        query = 'UPDATE "IndexerProxies" SET "Settings" = %s, "Tags" = %s WHERE "Name" = %s'
+        query = 'UPDATE "IndexerProxies" SET "Settings" = \'{ "host": "' + url + '",  "requestTimeout": 60}\', "Tags" = \'[' + str(tagid) + ']\' WHERE "Name" = \'' + name + '\''
 
-        self.set(query, data)
+        self.set(query)
 
     def get_indexer (self, name: str):
-        data = (name,)
-        query = 'SELECT * FROM "Indexers" WHERE "Name" = %s'
+        query = 'SELECT * FROM "Indexers" WHERE "Name" = \'' + name + '\''
 
-        row = self.get(query, data)
+        row = self.get(query)
         if row is not None:
             tagid = row[0][5].replace('[', '').replace(']', '')
             url = json.loads(row[0][3])["baseUrl"]
             user = json.loads(row[0][3])["extraFieldData"]["username"]
             password = json.loads(row[0][3])["extraFieldData"]["password"]
 
-            data = (tagid,)
-            query = 'SELECT * FROM "Tags" WHERE "Id" = %s'
-
-            row = self.get(query, data)
+            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid  + '\''
+            row = self.get(query)
             if row is not None:
                 tag = row[0][1]
                 return url, user, password, tag
@@ -134,42 +124,27 @@ class Database:
             return None, None, None, None
 
     def set_indexer(self, name: str, url: str, user: str, password: str, tagid: str):
-        data = (name, 'Cardigann', '{"definitionFile": "yggtorrent", "extraFieldData": '
-                '{"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, '
-                '"multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, '
-                '"enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", '
-                '"baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}',
-                'CardigannSettings', 1, 25, '2023-04-01 22:05:12.6172687Z', 0, 1, '[' + str(tagid) + ']', 0)
-        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(\'' + name + '\', "Cardigann", \'{"definitionFile": "yggtorrent", "extraFieldData": {"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, "multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, "enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", Cardigann"baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', "CardigannSettings", 1, 25, "2023-04-01 22:05:12.6172687Z", 0, 1, \'[' + str(tagid) + ']\', 0)'
 
-        self.set(query, data)
+        self.set(query)
 
     def update_indexer(self, name: str, url: str, user: str, password: str, tagid: str):
-        data = ('{"definitionFile": "yggtorrent", "extraFieldData": '
-                '{"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, '
-                '"multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, '
-                '"enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", '
-                '"baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}',
-                '[' + str(tagid) + ']', name)
-        query = 'UPDATE "Indexers" SET "Settings" = %s, "Tags" = %s WHERE "Name" = %s'
+        query = 'UPDATE "Indexers" SET "Settings" = \'{"definitionFile": "yggtorrent", "extraFieldData": {"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, "multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, "enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', "Tags" = \'[' + str(tagid) + ']\' WHERE "Name" = \'' + name + '\''
 
-        self.set(query, data)
+        self.set(query)
 
     def get_application(self, name: str):
-        data = (name,)
-        query = 'SELECT * FROM "Applications" WHERE "Name" = %s'
+        query = 'SELECT * FROM "Applications" WHERE "Name" = \'' + name + '\''
 
-        row = self.get(query, data)
+        row = self.get(query)
         if row is not None:
             tagid = row[0][5].replace('[', '').replace(']', '')
-            url = json.loads(rows[0][3])["baseUrl"]
-            apikey = json.loads(rows[0][3])["apiKey"]
-            prowlarrurl = json.loads(rows[0][3])["prowlarrUrl"]
+            url = json.loads(row[0][3])["baseUrl"]
+            apikey = json.loads(row[0][3])["apiKey"]
+            prowlarrurl = json.loads(row[0][3])["prowlarrUrl"]
 
-            data = (tagid,)
-            query = 'SELECT * FROM "Tags" WHERE "Id" = %s'
-
-            row = self.get(query, data)
+            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid + '\''
+            row = self.get(query)
             if row is not None:
                 tag = row[0][1]
                 return url, apikey, prowlarrurl, tag
@@ -179,20 +154,14 @@ class Database:
             return  None, None, None, None
 
     def set_application(self, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
-        data = (name, 'Sonarr', '{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "'
-                + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], '
-                '"syncAnimeStandardFormatSearch": true}', 'SonarrSettings', 2, '[' + str(tagid) + ']')
-        query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(%s, %s, %s, %s, %s, %s)'
+        query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Sonarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "SonarrSettings", 2, \'[' + str(tagid) + ']\')'
 
-        self.set(query, data)
+        self.set(query)
 
     def update_application(self, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
-        data = ('{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "'
-                + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], '
-                '"syncAnimeStandardFormatSearch": true}', '[' + str(tagid) + ']', name)
-        query = 'UPDATE "Applications" SET "Settings" = %s, "Tags" = %s WHERE "Name" = %s'
+        query = 'UPDATE "Applications" SET "Settings" = \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "'+ apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "Tags" = \'[' + str(tagid) + ']\' WHERE "Name" = \'' + name + '\''
 
-        self.set(query, data)
+        self.set(query)
 
     def reset_task(self):
         query = 'UPDATE "ScheduledTasks" SET "LastExecution" = "0001-01-01 00:00:00Z", "LastStartTime" = null WHERE "TypeName" = "NzbDrone.Core.Applications.ApplicationIndexerSyncCommand"'
