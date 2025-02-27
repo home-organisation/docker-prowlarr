@@ -78,7 +78,7 @@ class Database:
             return None, None
 
     def get_tag (self, tag: str):
-        query = 'SELECT "Id" FROM "Tags" WHERE "Label" = \'' + tag + '\''
+        query = 'SELECT * FROM "Tags" WHERE "Label" = \'' + tag + '\''
 
         row = self.get(query)
         if row is not None:
