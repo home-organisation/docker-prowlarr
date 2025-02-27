@@ -202,17 +202,17 @@ def reconcile(desired: dict, current: dict):
     if current["sonarr"] != desired["sonarr"]:
         logging.info("Detection of drift for sonarr, reconcile the value")
         if current["sonarr"]["url"] is None:
-            db.set_application(name=desired["sonarr"]["name"], url=desired["sonarr"]["url"], apikey=desired["sonarr"]["apikey"], prowlarrurl=desired["sonarr"]["prowlarrurl"], tagid=tagid)
+            db.set_application(kind="sonarr", name=desired["sonarr"]["name"], url=desired["sonarr"]["url"], apikey=desired["sonarr"]["apikey"], prowlarrurl=desired["sonarr"]["prowlarrurl"], tagid=tagid)
         else:
-            db.update_application(name=desired["sonarr"]["name"], url=desired["sonarr"]["url"], apikey=desired["sonarr"]["apikey"], prowlarrurl=desired["sonarr"]["prowlarrurl"], tagid=tagid)
+            db.update_application(kind="sonarr", name=desired["sonarr"]["name"], url=desired["sonarr"]["url"], apikey=desired["sonarr"]["apikey"], prowlarrurl=desired["sonarr"]["prowlarrurl"], tagid=tagid)
 
     # Reconcile radarr parameter
     if current["radarr"] != desired["radarr"]:
         logging.info("Detection of drift for radarr, reconcile the value")
         if current["radarr"]["url"] is None:
-            db.set_application(name=desired["radarr"]["name"], url=desired["radarr"]["url"], apikey=desired["radarr"]["apikey"], prowlarrurl=desired["radarr"]["prowlarrurl"], tagid=tagid)
+            db.set_application(kind='radarr', name=desired["radarr"]["name"], url=desired["radarr"]["url"], apikey=desired["radarr"]["apikey"], prowlarrurl=desired["radarr"]["prowlarrurl"], tagid=tagid)
         else:
-            db.update_application(name=desired["radarr"]["name"], url=desired["radarr"]["url"], apikey=desired["radarr"]["apikey"], prowlarrurl=desired["radarr"]["prowlarrurl"], tagid=tagid)
+            db.update_application(kind='radarr', name=desired["radarr"]["name"], url=desired["radarr"]["url"], apikey=desired["radarr"]["apikey"], prowlarrurl=desired["radarr"]["prowlarrurl"], tagid=tagid)
 
     # Reset IndexerSyncCommand task
     db.reset_task()

@@ -153,13 +153,25 @@ class Database:
         else:
             return  None, None, None, None
 
-    def set_application(self, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
-        query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Sonarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "SonarrSettings", 2, \'[' + str(tagid) + ']\')'
+    def set_application(self, kind:str, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
+        data = (name, 'Radarr', '{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + radarrurl + '", "apiKey": "'
+                + radarrkey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}',
+                'RadarrSettings', 2, '[' + str(tagid) + ']')
+
+        if kind == 'radarr':
+            query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Radarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}\', "RadarrSettings", 2, \'[' + str(tagid) + ']\')'
+
+        else:
+            query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Sonarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "SonarrSettings", 2, \'[' + str(tagid) + ']\')'
 
         self.set(query)
 
-    def update_application(self, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
-        query = 'UPDATE "Applications" SET "Settings" = \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "'+ apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "Tags" = \'[' + str(tagid) + ']\' WHERE "Name" = \'' + name + '\''
+    def update_application(self, kind: str, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
+        if kind == 'radarr':
+            query = 'UPDATE "Applications" SET "Settings" = \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}\', "Tags" = \'[' + str(tagid) + ']\' WHERE "Name" = \'' + name + '\''
+
+        else:
+            query = 'UPDATE "Applications" SET "Settings" = \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "'+ apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "Tags" = \'[' + str(tagid) + ']\' WHERE "Name" = \'' + name + '\''
 
         self.set(query)
 
