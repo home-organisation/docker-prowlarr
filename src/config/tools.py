@@ -21,7 +21,7 @@ def get_env_parameter() -> dict:
     proxytag = os.environ.get('PROXY_TAG') or "flare"
     indexername = os.environ.get('INDEXER_NAME') or "YGGtorrent"
     indexerurl = os.environ.get('INDEXER_URL') or "https://www.ygg.re/"
-    prowlarrurl = os.environ.get('PROWLARR_URL') or "http://prowlarr-web:9696"
+    prowlarrurl = os.environ.get('PROWLARR_URL') or "http://prowlarr:9696"
     sonarrurl = os.environ.get('SONARR_URL') or "http://sonarr:8989"
     sonarrname = os.environ.get('SONARR_NAME') or "TVShows"
     radarrurl = os.environ.get('RADARR_URL') or "http://radarr:7878"
