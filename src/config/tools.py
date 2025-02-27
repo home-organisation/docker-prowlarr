@@ -53,6 +53,7 @@ def get_env_parameter() -> dict:
             "url": indexerurl,
             "user": indexeruser,
             "password": indexerpassword,
+            "proxytag": proxytag,
         },
         "sonarr" : {
             "name": sonarrname,
