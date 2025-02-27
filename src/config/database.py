@@ -70,7 +70,7 @@ class Database:
             query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid + '\''
             row = self.get(query)
             if row is not None:
-                tag = row[0][1]
+                tag = row[1]
                 return  url, tag
             else:
                 return url, None
@@ -82,7 +82,7 @@ class Database:
 
         row = self.get(query)
         if row is not None:
-            tagid = row[0][1]
+            tagid = row[0]
             return tagid
         else:
             return None
@@ -116,7 +116,7 @@ class Database:
             query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid  + '\''
             row = self.get(query)
             if row is not None:
-                tag = row[0][1]
+                tag = row[1]
                 return url, user, password, tag
             else:
                 return url, user, password, None
@@ -146,7 +146,7 @@ class Database:
             query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid + '\''
             row = self.get(query)
             if row is not None:
-                tag = row[0][1]
+                tag = row[1]
                 return url, apikey, prowlarrurl, tag
             else:
                 return url, apikey, prowlarrurl, None
