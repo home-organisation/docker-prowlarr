@@ -154,10 +154,6 @@ class Database:
             return  None, None, None, None
 
     def set_application(self, kind:str, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
-        data = (name, 'Radarr', '{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + radarrurl + '", "apiKey": "'
-                + radarrkey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}',
-                'RadarrSettings', 2, '[' + str(tagid) + ']')
-
         if kind == 'radarr':
             query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Radarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}\', "RadarrSettings", 2, \'[' + str(tagid) + ']\')'
 
