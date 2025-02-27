@@ -67,7 +67,7 @@ class Database:
             tagid = row[0][5].replace('[', '').replace(']', '')
             url = json.loads(row[0][2])["host"]
 
-            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid + '\''
+            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + str(tagid) + '\''
             row = self.get(query)
             if row is not None:
                 tag = row[1]
@@ -113,7 +113,7 @@ class Database:
             user = json.loads(row[0][3])["extraFieldData"]["username"]
             password = json.loads(row[0][3])["extraFieldData"]["password"]
 
-            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid  + '\''
+            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + str(tagid)  + '\''
             row = self.get(query)
             if row is not None:
                 tag = row[1]
@@ -143,7 +143,7 @@ class Database:
             apikey = json.loads(row[0][3])["apiKey"]
             prowlarrurl = json.loads(row[0][3])["prowlarrUrl"]
 
-            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + tagid + '\''
+            query = 'SELECT * FROM "Tags" WHERE "Id" = \'' + str(tagid)+ '\''
             row = self.get(query)
             if row is not None:
                 tag = row[1]
