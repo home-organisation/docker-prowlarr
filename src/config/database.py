@@ -124,7 +124,7 @@ class Database:
             return None, None, None, None
 
     def set_indexer(self, name: str, url: str, user: str, password: str, tagid: str):
-        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(\'' + name + '\', \'Cardigann\', \'{"definitionFile": "yggtorrent", "extraFieldData": {"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, "multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, "enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', \'CardigannSettings\', 1, 25, \'2023-04-01 22:05:12.6172687Z\', 0, 1, \'[' + str(tagid) + ']\', 0)'
+        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(\'' + name + '\', \'Cardigann\', \'{"definitionFile": "yggtorrent", "extraFieldData": {"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, "multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, "enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', \'CardigannSettings\', true, 25, \'2023-04-01 22:05:12.6172687Z\', false, 1, \'[' + str(tagid) + ']\', 0)'
 
         self.set(query)
 

@@ -177,11 +177,11 @@ def reconcile(desired: dict, current: dict):
             db.update_credential(username=desired["user"], password=password)
 
     # Reconcile tag parameter and get its tag id
-    if current["proxy"]["tag"] is None:
+    tagid = db.get_tag(tag=desired["proxy"]["tag"])
+    if tagid is None:
         logging.info("Detection of drift for tag, reconcile the value")
         db.set_tag(tag=desired["proxy"]["tag"])
-
-    tagid = db.get_tag(tag=desired["proxy"]["tag"])
+        tagid = db.get_tag(tag=desired["proxy"]["tag"])
 
     # Reconcile proxy parameter
     if current["proxy"] != desired["proxy"]:
