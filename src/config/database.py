@@ -181,7 +181,7 @@ class Postgres(Database):
     def connect(self, user: str, password: str, host: str, port: str):
         # connecting to PostgreSQL database
         try:
-            self.conn = psycopg2.connect(database="sonarr-main", user=user, password=password, host=host, port=port)
+            self.conn = psycopg2.connect(database="prowlarr-main", user=user, password=password, host=host, port=port)
         except (psycopg2.DatabaseError, Exception) as error:
             logging.error("Connection to postgresql database failed")
             logging.error(error)
