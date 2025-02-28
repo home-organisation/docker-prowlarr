@@ -94,7 +94,7 @@ class Database:
 
 
     def set_proxy (self, name: str, url: str, tagid: str):
-        query = 'INSERT INTO "IndexerProxies" ("Name","Settings","Implementation","ConfigContract","Tags") VALUES(\'' + name + '\', \'{ "host": "' + url + '",  "requestTimeout": 60}\', "FlareSolverr", "FlareSolverrSettings", \'[' + str(tagid) + ']\')'
+        query = 'INSERT INTO "IndexerProxies" ("Name","Settings","Implementation","ConfigContract","Tags") VALUES(\'' + name + '\', \'{ "host": "' + url + '",  "requestTimeout": 60}\', \'FlareSolverr\', \'FlareSolverrSettings\', \'[' + str(tagid) + ']\')'
 
         self.set(query)
 
@@ -124,7 +124,7 @@ class Database:
             return None, None, None, None
 
     def set_indexer(self, name: str, url: str, user: str, password: str, tagid: str):
-        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(\'' + name + '\', "Cardigann", \'{"definitionFile": "yggtorrent", "extraFieldData": {"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, "multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, "enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', "CardigannSettings", 1, 25, "2023-04-01 22:05:12.6172687Z", 0, 1, \'[' + str(tagid) + ']\', 0)'
+        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(\'' + name + '\', \'Cardigann\', \'{"definitionFile": "yggtorrent", "extraFieldData": {"username": "' + user + '", "password": "' + password + '", "category": 6, "subcategory": 52, "multilang": false, "multilanguage": 1, "vostfr": false, "filter_title": false, "strip_season": true, "enhancedAnime": false, "enhancedAnime4": false, "sort": 1, "type": 1 }, "baseUrl": "' + url + '", "baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', \'CardigannSettings\', true, 25, \'2023-04-01 22:05:12.6172687Z\', false, 1, \'[' + str(tagid) + ']\', 0)'
 
         self.set(query)
 
@@ -155,10 +155,10 @@ class Database:
 
     def set_application(self, kind:str, name: str, url: str, apikey: str, prowlarrurl: str, tagid: str):
         if kind == 'radarr':
-            query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Radarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}\', "RadarrSettings", 2, \'[' + str(tagid) + ']\')'
+            query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', \'Radarr\', \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080]}\', \'RadarrSettings\', 2, \'[' + str(tagid) + ']\')'
 
         else:
-            query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', "Sonarr", \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', "SonarrSettings", 2, \'[' + str(tagid) + ']\')'
+            query = 'INSERT INTO "Applications" ("Name","Implementation","Settings","ConfigContract","SyncLevel","Tags") VALUES(\'' + name + '\', \'Sonarr\', \'{"prowlarrUrl": "' + prowlarrurl + '", "baseUrl": "' + url + '", "apiKey": "' + apikey + '", "syncCategories": [5000,5010,5020,5030,5040,5045,5050], "animeSyncCategories": [5070], "syncAnimeStandardFormatSearch": true}\', \'SonarrSettings\', 2, \'[' + str(tagid) + ']\')'
 
         self.set(query)
 
@@ -172,7 +172,7 @@ class Database:
         self.set(query)
 
     def reset_task(self):
-        query = 'UPDATE "ScheduledTasks" SET "LastExecution" = "0001-01-01 00:00:00Z", "LastStartTime" = null WHERE "TypeName" = "NzbDrone.Core.Applications.ApplicationIndexerSyncCommand"'
+        query = 'UPDATE "ScheduledTasks" SET "LastExecution" = \'0001-01-01 00:00:00Z\', "LastStartTime" = null WHERE "TypeName" = \'NzbDrone.Core.Applications.ApplicationIndexerSyncCommand\''
 
         self.set(query)
 
@@ -181,7 +181,7 @@ class Postgres(Database):
     def connect(self, user: str, password: str, host: str, port: str):
         # connecting to PostgreSQL database
         try:
-            self.conn = psycopg2.connect(database="sonarr-main", user=user, password=password, host=host, port=port)
+            self.conn = psycopg2.connect(database="prowlarr-main", user=user, password=password, host=host, port=port)
         except (psycopg2.DatabaseError, Exception) as error:
             logging.error("Connection to postgresql database failed")
             logging.error(error)
