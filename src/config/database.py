@@ -133,6 +133,20 @@ class Database:
 
         self.set(query)
 
+    def get_default_indexer(self):
+        query = 'SELECT * FROM "Indexers" WHERE "Name" = \'The Pirate Bay\''
+
+        row = self.get(query)
+        if row is not None:
+            return True
+        else:
+            return False
+
+    def set_default_indexer(self):
+        query = 'INSERT INTO "Indexers" ("Name","Implementation","Settings","ConfigContract","Enable","Priority","Added","Redirect","AppProfileId","Tags","DownloadClientId") VALUES(\'The Pirate Bay\', \'Cardigann\', \'{"definitionFile": "thepiratebay", "baseUrl": "https://thepiratebay.org/", "baseSettings": { "limitsUnit": 0 }, "torrentBaseSettings": {}}\', \'CardigannSettings\', true, 40, \'2023-04-01 22:05:12.6172687Z\', false, 1, \'[]\', 0)'
+
+        self.set(query)
+
     def get_application(self, name: str):
         query = 'SELECT * FROM "Applications" WHERE "Name" = \'' + name + '\''
 
