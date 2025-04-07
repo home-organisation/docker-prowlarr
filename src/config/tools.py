@@ -68,7 +68,7 @@ def get_env_parameter() -> dict:
             "apikey": radarrapikey,
             "prowlarrurl": prowlarrurl,
             "proxytag": proxytag,
-        }
+        },
     }
 
     return param
