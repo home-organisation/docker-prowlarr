@@ -43,6 +43,7 @@ def get_env_parameter() -> dict:
         "identifier": None,
         "salt": None,
         "password": password,
+        "defaultIndexer": True,
         "proxy" : {
             "name": proxyname,
             "url": proxyurl,
@@ -68,7 +69,7 @@ def get_env_parameter() -> dict:
             "apikey": radarrapikey,
             "prowlarrurl": prowlarrurl,
             "proxytag": proxytag,
-        }
+        },
     }
 
     return param
@@ -99,6 +100,7 @@ def get_db_parameter() -> dict:
     indexerurl, indexeruser, indexerpassword, indexer_proxytag = db.get_indexer(name=indexername)
     sonarrurl, sonarrapikey, sonarr_prowlarrurl, sonarr_proxytag = db.get_application(name=sonarrname)
     radarrurl, radarrapikey, radarr_prowlarrurl, radarr_proxytag = db.get_application(name=radarrname)
+    defaultIndexer = db.get_default_indexer()
 
     db.close()
 
@@ -107,6 +109,7 @@ def get_db_parameter() -> dict:
         "identifier": identifier,
         "salt": salt,
         "password": password,
+        "defaultIndexer": defaultIndexer,
         "proxy": {
             "name": proxyname,
             "url": proxyurl,
@@ -198,6 +201,11 @@ def reconcile(desired: dict, current: dict):
             db.set_indexer(name=desired["indexer"]["name"], url=desired["indexer"]["url"], user=desired["indexer"]["user"], password=desired["indexer"]["password"], tagid=tagid)
         else:
             db.update_indexer(name=desired["indexer"]["name"], url=desired["indexer"]["url"], user=desired["indexer"]["user"], password=desired["indexer"]["password"], tagid=tagid)
+
+    if current["defaultIndexer"] != desired["defaultIndexer"]:
+        logging.info("Detection of drift for default indexer, reconcile the value")
+        if desired["defaultIndexer"] is True:
+            db.set_default_indexer()
 
     # Reconcile sonarr parameter
     if current["sonarr"] != desired["sonarr"]:
