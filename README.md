@@ -20,12 +20,13 @@ The parameters below are taken from the original image [lscr.io/linuxserver/prow
 The extra parameters below come from this custom image :
 - Prowlarr parameters :
 
-| Parameters       | Examples values                 | Functions                                                                                |
-|------------------|---------------------------------|------------------------------------------------------------------------------------------|
-| AUTHMETHOD       | Forms (default)                 | Authentication method for web authentication. Acceptable value is **Forms** or **Basic** |
-| USER             | admin (default)                 | Username for web authentication                                                          |
-| PASSWORD         | ****                            | Password for web authentication                                                          |
-| APIKEY           | ****                            | Key for api authentication                                                               |
+| Parameters       | Examples values   | Functions                                                                                |
+|------------------|-------------------|------------------------------------------------------------------------------------------|
+| AUTHMETHOD       | Forms (default)   | Authentication method for web authentication. Acceptable value is **Forms** or **Basic** |
+| URLBASE         | /proxy (optional) | Base URL for Prowlarr web interface                                                      |
+| USER             | admin (default)   | Username for web authentication                                                          |
+| PASSWORD         | ****              | Password for web authentication                                                          |
+| APIKEY           | ****              | Key for api authentication                                                               |
 
 - Proxy (Flaresolverr) parameters :
 
