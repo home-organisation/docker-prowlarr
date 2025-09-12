@@ -12,6 +12,7 @@ def get_env_parameter() -> dict:
 
     apikey = os.environ.get('APIKEY')
     authmethod = os.environ.get('AUTHMETHOD') or "Forms"
+    urlbase = os.environ.get('URLBASE')
     dbuser = os.environ.get('DBUSER')
     dbpass = os.environ.get('DBPASS')
     dbport = os.environ.get('DBPORT')
@@ -27,6 +28,7 @@ def get_env_parameter() -> dict:
     env = {
         "ApiKey": apikey,
         "AuthenticationMethod": authmethod,
+        "UrlBase": urlbase,
         "PostgresUser": dbuser,
         "PostgresPassword": dbpass,
         "PostgresPort": dbport,
