@@ -3,7 +3,7 @@ LABEL Maintainer="bizalu"
 
 # Prepare python environment
 ENV PYTHONUNBUFFERED=1
-RUN apk add --no-cache python3 py3-defusedxml py3-psycopg2
+RUN apk add --no-cache python3 py3-defusedxml py3-psycopg2 py3-requests
 RUN apk -U upgrade --no-cache
 RUN if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi
 
@@ -20,4 +20,9 @@ COPY src/init/ /app/init/
 # Install custom post script
 COPY scripts/10-custom-config.sh /custom-cont-post.d/
 RUN chmod 744 /custom-cont-post.d/*
-COPY /src/config/ /app/config/
+COPY /src/config/ /app/config
+
+# Install healthcheck script
+COPY scripts/healthcheck /usr/local/bin/
+RUN chmod 744 /usr/local/bin/healthcheck
+COPY /src/health/ /app/health/
