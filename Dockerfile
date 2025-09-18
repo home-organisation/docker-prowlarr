@@ -20,4 +20,9 @@ COPY src/init/ /app/init/
 # Install custom post script
 COPY scripts/10-custom-config.sh /custom-cont-post.d/
 RUN chmod 744 /custom-cont-post.d/*
-COPY /src/config/ /app/config/
+COPY /src/config/ /app/config
+
+# Install healthcheck script
+COPY scripts/healthcheck /usr/local/bin/
+RUN chmod 744 /usr/local/bin/healthcheck
+COPY /src/health/ /app/health/
