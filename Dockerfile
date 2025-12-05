@@ -3,9 +3,9 @@ LABEL Maintainer="bizalu"
 
 # Prepare python environment
 ENV PYTHONUNBUFFERED=1
-RUN apk add --no-cache python3 py3-defusedxml py3-psycopg2 py3-requests
-RUN apk -U upgrade --no-cache
-RUN if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi
+#RUN apk add --no-cache python3 py3-defusedxml py3-psycopg2 py3-requests
+#RUN apk -U upgrade --no-cache
+#RUN if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi
 
 
 # Install custom post files
@@ -28,6 +28,6 @@ RUN chmod 744 /usr/local/bin/healthcheck
 COPY /src/health/ /app/health/
 
 # Install custom indexer (yggtorrent)
-RUN mkdir -p /config/Definitions/Custom && \
-    curl -o /config/Definitions/Custom/yggtorrent.yml https://raw.githubusercontent.com/Jackett/Jackett/master/src/Jackett.Common/Definitions/yggtorrent.yml && \
-    curl -o /config/Definitions/Custom/yggcookie.yml https://raw.githubusercontent.com/Jackett/Jackett/master/src/Jackett.Common/Definitions/yggcookie.yml
+ADD https://raw.githubusercontent.com/Jackett/Jackett/master/src/Jackett.Common/Definitions/yggtorrent.yml /config/Definitions/Custom/
+ADD https://raw.githubusercontent.com/Jackett/Jackett/master/src/Jackett.Common/Definitions/yggcookie.yml /config/Definitions/Custom/
+RUN chmod 644 /config/Definitions/Custom/*
