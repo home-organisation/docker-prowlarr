@@ -26,3 +26,8 @@ COPY /src/config/ /app/config
 COPY scripts/healthcheck /usr/local/bin/
 RUN chmod 744 /usr/local/bin/healthcheck
 COPY /src/health/ /app/health/
+
+# Install custom indexer (yggtorrent)
+RUN mkdir -p /config/Definitions/Custom
+RUN curl -o /config/Definitions/Custom/yggtorrent.yml https://raw.githubusercontent.com/Jackett/Jackett/master/src/Jackett.Common/Definitions/yggtorrent.yml
+RUN curl -o /config/Definitions/Custom/yggcookie.yml https://raw.githubusercontent.com/Jackett/Jackett/master/src/Jackett.Common/Definitions/yggcookie.yml
